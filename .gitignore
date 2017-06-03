@@ -1,2 +1,4 @@
 *.pyc
 .idea/
+settings.ini
+*.sqlite3
