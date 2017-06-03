@@ -19,7 +19,7 @@ class Seat(models.Model):
     """
     Model class for the seat.
     """
-    number = models.IntegerField(max_length=2)
+    number = models.IntegerField()
 
 
 class Row(models.Model):

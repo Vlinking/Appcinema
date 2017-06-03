@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # for Facebook login
     'social_django',
     'decouple',
+    'rest_framework',
     'Appcinema',
 ]
 
@@ -136,7 +137,13 @@ LOGIN_REDIRECT_URL = 'home'
 SOCIAL_AUTH_FACEBOOK_KEY = config('FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = config('FACEBOOK_SECRET')
 
-
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
