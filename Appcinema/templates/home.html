@@ -18,6 +18,7 @@
     <div class="step_3">
         <div class="seat-reservation">
             <form class="seats" action="" method="post" name="seats">
+                {% csrf_token %}
                 {% for row, seats in rows.items %}
                     <div class="row">
                         {{ row.name }}

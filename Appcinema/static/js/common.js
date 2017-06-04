@@ -46,9 +46,13 @@ function step_forward() {
 
 }
 
-function book() {
+function book(seat, row, movie) {
     // book a seat
-
+       var data = $('.seats').serialize();
+       data = data + '&seat=' + seat + '&row=' + row + '&movie=' + movie;
+       $.post('/api/reservation/', data, function(result) {
+           $('.' + row + '_' + seat).addClass('selected');
+       });
 }
 
 
@@ -62,8 +66,8 @@ $(document).ready(function() {
         var id = $(this).attr('id').split('_');
         var row = id[0];
         var seat = id[1];
-        // run checks against matching row, max number of seats, adjacency etc. etc. etc.
-        $(this).toggleClass('selected');
+        // todo run checks against matching row, max number of seats, adjacency etc. etc. etc.
+        //$(this).toggleClass('selected');
         if (typeof CurrentBooked['row'] == 'undefined') {
             CurrentBooked['row'] = row;
         }
@@ -71,6 +75,7 @@ $(document).ready(function() {
             CurrentBooked['seats'] = [];
         }
         CurrentBooked['seats'].push(seat);
+        book(seat, row, CurrentBooked['movie']);
     });
 
 

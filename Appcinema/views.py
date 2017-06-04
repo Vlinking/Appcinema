@@ -2,7 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.response import TemplateResponse
 from django.views.generic import TemplateView
 
-from rest_framework import viewsets
+from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
 
@@ -50,4 +51,30 @@ class ReservationViewSet(viewsets.ModelViewSet):
     """
     queryset = models.Reservation.objects.all()
     serializer_class = ReservationSimplerSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def create(self, request, *args, **kwargs):
+        """
+        Do custom things here and create the table row.
+        """
+        modified_data = request.data.copy()
+        modified_data['user'] = request.user.id
+        modified_data['status'] = models.Reservation.STATUS_TENTATIVE_BOOKED
+        row = Row.objects.get(name=modified_data['row'])
+        seat = Seat.objects.get(number=modified_data['seat'], row=row)
+        modified_data['seat'] = seat.id
+        serializer = self.get_serializer(data=modified_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+
+
+
+
+
+
+
 
