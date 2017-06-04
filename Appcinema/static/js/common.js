@@ -11,7 +11,26 @@ function get_movies() {
        });
 }
 
+function get_reservations() {
+    // Load reservations after selecting a movie.
+    $.get('/api/movies/' + $('.movie-chooser').val() + '/reservation_list/', {}, function(data) {
+        // iterate over the seats and update their statuses
+        // (selected by others are unclickable!)
+        $('.step_2').hide();
+        $.each(data, function(index, seat) {
+                console.log(seat);
+            }
+        );
+        $('step_3').show();
+    });
+}
+
+
+
 $(document).ready(function() {
     get_movies();
+    $('.step_2_next').click(function() {
+        get_reservations();
+    });
 
 });

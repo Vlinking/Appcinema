@@ -36,6 +36,13 @@ class MovieViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Movie.objects.all()
     serializer_class = MovieSerializer
 
+    @detail_route()
+    def reservation_list(self, request, pk=None):
+        movie = self.get_object()
+        reservation = models.Reservation.objects.filter(movie=movie)
+        reservation_json = ReservationSerializer(reservation, many=True)
+        return Response(reservation_json.data)
+
 
 class ReservationViewSet(viewsets.ModelViewSet):
     """
@@ -44,9 +51,3 @@ class ReservationViewSet(viewsets.ModelViewSet):
     queryset = models.Reservation.objects.all()
     serializer_class = ReservationSerializer
 
-    @detail_route()
-    def reservation_list(self, request, pk=None):
-        movie = self.get_object()
-        reservation = models.Reservation.objects.filter(movie=movie)
-        reservation_json = ReservationSerializer(reservation, many=True)
-        return Response(reservation_json.data)
