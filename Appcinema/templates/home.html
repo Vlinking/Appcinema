@@ -7,7 +7,7 @@
   Wanna see a movie? Book a seat here!
 
   <div class="step_2">
-      <div>
+      <div class="movie-choice">
           <form class="movie" action="" method="post">
               {% csrf_token %}
               <select name="choose_movie" class="movie-chooser">
@@ -15,8 +15,21 @@
               <input type="button" name="next" value="next">
           </form>
       </div>
-
-
   </div>
+    <div class="step_3">
+        <div class="seat-reservation">
+            {% for row, seats in rows.items %}
+                <div class="row">
+                    {{ row.name }}
+                    {% for seat in seats %}
+                        <div class="seat {{ row.name }}_{{ seat.number }}">
+                            {{ seat.number }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
 
 {% endblock %}

@@ -28,7 +28,7 @@ router.register(r'api/movies', views.MovieViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.home, name='home'),
+    url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
