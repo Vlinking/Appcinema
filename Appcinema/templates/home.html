@@ -9,7 +9,6 @@
   <div class="step_2">
       <div class="movie-choice">
           <form class="movie" action="" method="post">
-              {% csrf_token %}
               <select name="choose_movie" class="movie-chooser">
               </select>
               <input type="button" name="next" value="next" class="step_2_next">
@@ -18,18 +17,37 @@
   </div>
     <div class="step_3">
         <div class="seat-reservation">
-            {% for row, seats in rows.items %}
-                <div class="row">
-                    {{ row.name }}
-                    {% for seat in seats %}
-                        <div class="seat {{ row.name }}_{{ seat.number }}">
-                            {{ seat.number }}
-                        </div>
-                    {% endfor %}
-                </div>
-
-            {% endfor %}
+            <form class="seats" action="" method="post" name="seats">
+                {% for row, seats in rows.items %}
+                    <div class="row">
+                        {{ row.name }}
+                        {% for seat in seats %}
+                            <div id="{{ row.name }}_{{ seat.number }}" class="seat {{ row.name }}_{{ seat.number }}">
+                                {{ seat.number }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <input type="button" name="next" value="next" class="step_3_next">
+            </form>
         </div>
     </div>
+    <div class="step_4">
+        <div class="reservation-confirmation">
+            Please confirm your registration:
+
+            <div class="confirmation-info">
+
+
+            </div>
+
+            <input type="button" name="next" value="confirm" class="step_4_confirm">
+
+        </div>
+    </div>
+
+
+
+
 
 {% endblock %}

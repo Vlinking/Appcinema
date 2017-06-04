@@ -39,3 +39,17 @@ class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = ('seat', 'user', 'movie', 'status')
+
+
+
+class ReservationSimplerSerializer(serializers.ModelSerializer):
+    """
+    A simpler reservation serializer.
+    """
+    class Meta:
+        model = Reservation
+        fields = ('seat', 'user', 'movie', 'status')
+
+
+
+

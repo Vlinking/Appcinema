@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import detail_route
 
 from Appcinema.models import Row, Seat
-from Appcinema.serializers import MovieSerializer, ReservationSerializer
+from Appcinema.serializers import MovieSerializer, ReservationSerializer, ReservationSimplerSerializer
 from Appcinema import models
 
 
@@ -49,5 +49,5 @@ class ReservationViewSet(viewsets.ModelViewSet):
     The all purpose viewset for manipulating reservations. Magic goes on here.
     """
     queryset = models.Reservation.objects.all()
-    serializer_class = ReservationSerializer
+    serializer_class = ReservationSimplerSerializer
 
