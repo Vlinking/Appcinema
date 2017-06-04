@@ -3,9 +3,11 @@ from django.template.response import TemplateResponse
 from django.views.generic import TemplateView
 
 from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import detail_route
 
 from Appcinema.models import Row, Seat
-from Appcinema.serializers import MovieSerializer
+from Appcinema.serializers import MovieSerializer, ReservationSerializer
 from Appcinema import models
 
 
@@ -33,3 +35,18 @@ class MovieViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = models.Movie.objects.all()
     serializer_class = MovieSerializer
+
+
+class ReservationViewSet(viewsets.ModelViewSet):
+    """
+    The all purpose viewset for manipulating reservations. Magic goes on here.
+    """
+    queryset = models.Reservation.objects.all()
+    serializer_class = ReservationSerializer
+
+    @detail_route()
+    def reservation_list(self, request, pk=None):
+        movie = self.get_object()
+        reservation = models.Reservation.objects.filter(movie=movie)
+        reservation_json = ReservationSerializer(reservation, many=True)
+        return Response(reservation_json.data)
