@@ -76,7 +76,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
             instance = None
 
         if instance:
-            modified_data['status'] = 1 - models.Reservation.STATUS_FREE
+            modified_data['status'] = 1 - modified_data['status']
             modified_data['id'] = instance.id
             serializer = self.get_serializer(instance, data=modified_data)
             serializer.is_valid(raise_exception=True)
