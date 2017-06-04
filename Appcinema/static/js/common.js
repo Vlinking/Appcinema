@@ -55,6 +55,14 @@ function book(seat, row, movie) {
        });
 }
 
+function unbook(seat, row, movie) {
+    // book a seat
+       var data = $('.seats').serialize();
+       data = data + '&seat=' + seat + '&row=' + row + '&movie=' + movie;
+       $.post('/api/reservation/', data, function(result) {
+           $('.' + row + '_' + seat).removeClass('selected');
+       });
+}
 
 $(document).ready(function() {
     get_movies();
@@ -63,11 +71,14 @@ $(document).ready(function() {
     });
 
     $('.row .seat').click(function() {
+        // selected by others are unclickable
+        if (($(this).hasClass('tentative-booked')) || ($(this).hasClass('booked'))) {
+            return;
+        }
         var id = $(this).attr('id').split('_');
         var row = id[0];
         var seat = id[1];
         // todo run checks against matching row, max number of seats, adjacency etc. etc. etc.
-        //$(this).toggleClass('selected');
         if (typeof CurrentBooked['row'] == 'undefined') {
             CurrentBooked['row'] = row;
         }
@@ -75,7 +86,11 @@ $(document).ready(function() {
             CurrentBooked['seats'] = [];
         }
         CurrentBooked['seats'].push(seat);
-        book(seat, row, CurrentBooked['movie']);
+        if (!$(this).hasClass('selected')) {
+            book(seat, row, CurrentBooked['movie']);
+        } else {
+            unbook(seat, row, CurrentBooked['movie']);
+        }
     });
 
 
