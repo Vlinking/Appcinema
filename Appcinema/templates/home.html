@@ -1,11 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Homepage</h2>
+  <h2>Appcinema</h2>
   <p>Hello {{ user.username }}!</p>
 
-  Wanna see a movie? Register here!
+  Wanna see a movie? Book a seat here!
+
+  <div class="step_2">
+      <div>
+          <form class="movie" action="" method="post">
+              {% csrf_token %}
+              <select name="choose_movie" class="movie-chooser">
+              </select>
+              <input type="button" name="next" value="next">
+          </form>
+      </div>
 
 
+  </div>
 
 {% endblock %}

@@ -9,4 +9,4 @@ class MovieSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = Movie
-        fields = ('title',)
+        fields = ('id', 'title',)

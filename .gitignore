@@ -1,4 +1,5 @@
 *.pyc
 .idea/
+static/
 settings.ini
 *.sqlite3
