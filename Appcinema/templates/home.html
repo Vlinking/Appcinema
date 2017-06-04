@@ -36,18 +36,20 @@
     <div class="step_4">
         <div class="reservation-confirmation">
             Please confirm your registration:
-
             <div class="confirmation-info">
-
-
             </div>
-
-            <input type="button" name="next" value="confirm" class="step_4_confirm">
+            <form class="confirmation" action="" method="post" name="confirmation">
+                {% csrf_token %}
+                <input type="button" name="next" value="confirm" class="step_4_confirm">
+            </form>
 
         </div>
     </div>
 
-
+    <div class="step_5">
+        Registration confirmed!
+        <a href="/">Go back.</a>
+    </div>
 
 
 

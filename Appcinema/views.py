@@ -6,6 +6,7 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
+from rest_framework.views import APIView
 
 from Appcinema.models import Row, Seat
 from Appcinema.serializers import MovieSerializer, ReservationSerializer, ReservationSimplerSerializer
@@ -91,8 +92,24 @@ class ReservationViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+class ConfirmReservation(APIView):
+    permission_classes = (IsAuthenticated,)
 
+    def post(self, request, format=None):
+        seats = models.Seat.objects.filter(
+            row=models.Row.objects.get(name=request.data['row']),
+            number__in=request.data['seats'].split(","),
+        )
+        reservations = models.Reservation.objects.filter(
+            seat__in=seats,
+            movie=request.data['movie'],
+            user=request.user
+        )
+        for reservation in reservations:
+            reservation.status = models.Reservation.STATUS_BOOKED
+            reservation.save()
 
+        return Response([], status=status.HTTP_200_OK)
 
 
 
