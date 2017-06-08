@@ -137,6 +137,13 @@ LOGIN_REDIRECT_URL = 'home'
 SOCIAL_AUTH_FACEBOOK_KEY = config('FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = config('FACEBOOK_SECRET')
 
+# Pusher for faux websockets
+PUSHER_APP_ID = config('PUSHER_APP_ID')
+PUSHER_APP_KEY = config('PUSHER_APP_KEY')
+PUSHER_APP_SECRET = config('PUSHER_APP_SECRET')
+PUSHER_APP_CLUSTER = config('PUSHER_APP_CLUSTER')
+
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
