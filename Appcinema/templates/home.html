@@ -23,7 +23,7 @@
                     <div class="row">
                         {{ row.name }}
                         {% for seat in seats %}
-                            <div id="{{ row.name }}_{{ seat.number }}" class="seat {{ row.name }}_{{ seat.number }}">
+                            <div id="seat_{{ seat.id }}" class="seat">
                                 {{ seat.number }}
                             </div>
                         {% endfor %}

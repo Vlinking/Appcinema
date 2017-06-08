@@ -54,48 +54,14 @@ class ReservationViewSet(viewsets.ModelViewSet):
     serializer_class = ReservationSimplerSerializer
     permission_classes = (IsAuthenticated,)
 
-    def create(self, request, *args, **kwargs):
-        """
-        Do custom things here and create the table row.
-        """
-        modified_data = request.data.copy()
-        modified_data['user'] = request.user.id
-        modified_data['status'] = models.Reservation.STATUS_TENTATIVE_BOOKED
-        row = Row.objects.get(name=modified_data['row'])
-        seat = Seat.objects.get(number=modified_data['seat'], row=row)
-        modified_data['seat'] = seat.id
-        # check if the instance already exists, we don't reference it by id
-        # so create always goes in
-        try:
-            instance = models.Reservation.objects.get(
-                seat=modified_data['seat'],
-                user=modified_data['user'],
-                movie=modified_data['movie'],
-                status=modified_data['status']
-            )
-        except models.Reservation.DoesNotExist:
-            instance = None
-
-        if instance:
-            modified_data['status'] = 1 - modified_data['status']
-            modified_data['id'] = instance.id
-            serializer = self.get_serializer(instance, data=modified_data)
-            serializer.is_valid(raise_exception=True)
-            self.perform_update(serializer)
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
-        else:
-            serializer = self.get_serializer(data=modified_data)
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
 
 class ConfirmReservation(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, format=None):
+        """
+        We have confirmed all of our reservations in a batch.
+        """
         seats = models.Seat.objects.filter(
             row=models.Row.objects.get(name=request.data['row']),
             number__in=request.data['seats'].split(","),

@@ -14,13 +14,13 @@ function get_movies() {
 }
 
 
-function update_visual_status(row, seat, status) {
+function update_visual_status(seat, status) {
     var status_map = {
         '0': 'free',
         '1': 'tentative-booked',
         '2': 'booked'
     };
-    var target = $('.row .' + row + '_' + seat);
+    var target = $('#seat_' + seat);
     target.removeClass('free tentative booked');
     target.addClass(status_map[status]);
 }
@@ -34,7 +34,7 @@ function get_reservations() {
         // (selected by others are unclickable!)
         $('.step_2').hide();
         $.each(data, function(index, reservation) {
-                update_visual_status(reservation['seat']['row']['name'], reservation['seat']['number'], reservation['status'] );
+                update_visual_status(reservation['seat'].id, reservation['status'] );
             }
         );
         $('.step_3').show();
@@ -65,21 +65,21 @@ function confirm() {
        });
 }
 
-function book(seat, row, movie) {
+function book(seat, movie) {
     // book a seat
        var data = $('.seats').serialize();
-       data = data + '&seat=' + seat + '&row=' + row + '&movie=' + movie;
+       data = data + '&seat=' + seat + '&movie=' + movie + '&status=1';
        $.post('/api/reservation/', data, function(result) {
-           $('.' + row + '_' + seat).addClass('selected');
+           $('#seat_' + seat).addClass('selected');
        });
 }
 
-function unbook(seat, row, movie) {
+function unbook(seat, movie) {
     // unbook a seat
        var data = $('.seats').serialize();
-       data = data + '&seat=' + seat + '&row=' + row + '&movie=' + movie;
+       data = data + '&seat=' + seat + '&movie=' + movie + '&status=0';
        $.post('/api/reservation/', data, function(result) {
-           $('.' + row + '_' + seat).removeClass('selected');
+           $('#seat_' + seat).removeClass('selected');
        });
 }
 
@@ -95,20 +95,20 @@ $(document).ready(function() {
             return;
         }
         var id = $(this).attr('id').split('_');
-        var row = id[0];
         var seat = id[1];
         // todo run checks against matching row, max number of seats, adjacency etc. etc. etc.
         if (typeof CurrentBooked['row'] == 'undefined') {
-            CurrentBooked['row'] = row;
+            // todo temporary
+            CurrentBooked['row'] = '';
         }
         if (typeof CurrentBooked['seats'] == 'undefined') {
             CurrentBooked['seats'] = [];
         }
         if (!$(this).hasClass('selected')) {
-            book(seat, row, CurrentBooked['movie']);
+            book(seat, CurrentBooked['movie']);
             CurrentBooked['seats'].push(seat);
         } else {
-            unbook(seat, row, CurrentBooked['movie']);
+            unbook(seat, CurrentBooked['movie']);
             CurrentBooked['seats'].splice( $.inArray(seats, CurrentBooked['seats']), 1 );
         }
     });
